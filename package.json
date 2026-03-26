@@ -1,0 +1,17 @@
+{
+  "name": "gomoku",
+  "version": "1.0.0",
+  "description": "五子棋游戏",
+  "type": "module",
+  "main": "game.js",
+  "scripts": {
+    "dev": "echo '请在浏览器中打开 index.html 文件'"
+  },
+  "keywords": [
+    "五子棋",
+    "游戏",
+    "gomoku"
+  ],
+  "author": "",
+  "license": "MIT"
+}
