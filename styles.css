@@ -41,6 +41,11 @@ h1 {
     border-radius: 8px;
 }
 
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+
 #status {
     font-size: 1.2rem;
     color: #333;
@@ -51,7 +56,8 @@ h1 {
     color: #000;
 }
 
-#restartBtn {
+#restartBtn,
+#undoBtn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
@@ -62,12 +68,18 @@ h1 {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-#restartBtn:hover {
+#undoBtn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+#restartBtn:hover,
+#undoBtn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-#restartBtn:active {
+#restartBtn:active,
+#undoBtn:active {
     transform: translateY(0);
 }
 
@@ -136,6 +148,36 @@ h1 {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* 最后落子标记 */
+.stone.last-move::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #ff4444;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 68, 68, 0.8);
+    animation: lastMovePulse 1.5s ease-in-out infinite;
+}
+
+.stone.last-move {
+    box-shadow: 0 0 8px 2px rgba(255, 68, 68, 0.6);
+}
+
+@keyframes lastMovePulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0.7;
+    }
+}
+
 .cell:hover:not(.occupied) {
     background: rgba(0, 0, 0, 0.05);
 }
@@ -190,5 +232,15 @@ h1 {
     .game-info {
         flex-direction: column;
         gap: 15px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #restartBtn,
+    #undoBtn {
+        width: 100%;
     }
 }

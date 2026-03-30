@@ -14,6 +14,7 @@ let moveHistory = [];           // 移动历史记录
 const boardElement = document.getElementById('board');
 const statusElement = document.getElementById('status');
 const restartBtn = document.getElementById('restartBtn');
+const undoBtn = document.getElementById('undoBtn');
 
 /**
  * 初始化游戏
@@ -35,6 +36,9 @@ function renderBoard() {
     // 清空棋盘
     boardElement.innerHTML = '';
 
+    // 获取最后落子位置
+    const lastMove = moveHistory.length > 0 ? moveHistory[moveHistory.length - 1] : null;
+
     // 创建棋盘格子
     for (let row = 0; row < BOARD_SIZE; row++) {
         for (let col = 0; col < BOARD_SIZE; col++) {
@@ -47,6 +51,12 @@ function renderBoard() {
             if (board[row][col] !== EMPTY) {
                 const stone = document.createElement('div');
                 stone.className = `stone ${board[row][col] === BLACK ? 'black' : 'white'}`;
+
+                // 标记最后落子位置
+                if (lastMove && lastMove.row === row && lastMove.col === col) {
+                    stone.classList.add('last-move');
+                }
+
                 cell.appendChild(stone);
                 cell.classList.add('occupied');
             }
@@ -199,13 +209,43 @@ function updateStatus(message) {
 }
 
 /**
+ * 悔棋功能 - 撤销上一步
+ */
+function undoMove() {
+    // 如果游戏结束或没有历史记录，则不处理
+    if (moveHistory.length === 0) {
+        return;
+    }
+
+    // 获取最后一步
+    const lastMove = moveHistory.pop();
+    const { row, col, player } = lastMove;
+
+    // 清除该位置的棋子
+    board[row][col] = EMPTY;
+
+    // 恢复当前玩家为上一步的玩家
+    currentPlayer = player;
+
+    // 如果游戏已结束，重置游戏状态
+    if (gameEnded) {
+        gameEnded = false;
+    }
+
+    // 重新渲染棋盘和状态
+    renderBoard();
+    updateStatus();
+}
+
+/**
  * 重新开始游戏
  */
 function restartGame() {
     initGame();
 }
 
-// 绑定重新开始按钮事件
+// 绑定按钮事件
+undoBtn.addEventListener('click', undoMove);
 restartBtn.addEventListener('click', restartGame);
 
 // 初始化游戏
